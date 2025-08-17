@@ -7,17 +7,22 @@ type EnvFunction = {
   int: (key: string) => number; // for integers
 };
 
+// Define valid database clients
+type DatabaseClient = "mysql" | "postgres" | "sqlite";
+
 export default ({ env }: { env: EnvFunction }) => {
-  const client = env("DATABASE_CLIENT") || "sqlite"; // Use a fallback value if env() returns undefined
+  // Explicitly declare the client type
+  const client: DatabaseClient = (env("DATABASE_CLIENT") ||
+    "sqlite") as DatabaseClient;
 
   const connections = {
     mysql: {
       connection: {
-        host: env("DATABASE_HOST") || "localhost", // Default fallback
-        port: env.int("DATABASE_PORT") || 3306, // Default fallback
-        database: env("DATABASE_NAME") || "strapi", // Default fallback
-        user: env("DATABASE_USERNAME") || "strapi", // Default fallback
-        password: env("DATABASE_PASSWORD") || "strapi", // Default fallback
+        host: env("DATABASE_HOST") || "localhost",
+        port: env.int("DATABASE_PORT") || 3306,
+        database: env("DATABASE_NAME") || "strapi",
+        user: env("DATABASE_USERNAME") || "strapi",
+        password: env("DATABASE_PASSWORD") || "strapi",
         ssl: env("DATABASE_SSL") === "true" && {
           key: env("DATABASE_SSL_KEY"),
           cert: env("DATABASE_SSL_CERT"),
@@ -50,7 +55,7 @@ export default ({ env }: { env: EnvFunction }) => {
           rejectUnauthorized:
             env("DATABASE_SSL_REJECT_UNAUTHORIZED") === "true",
         },
-        schema: env("DATABASE_SCHEMA") || "public", // Default fallback
+        schema: env("DATABASE_SCHEMA") || "public",
       },
       pool: {
         min: env.int("DATABASE_POOL_MIN") || 2,
@@ -63,7 +68,7 @@ export default ({ env }: { env: EnvFunction }) => {
           __dirname,
           "..",
           "..",
-          env("DATABASE_FILENAME") || ".tmp/data.db" // Default fallback
+          env("DATABASE_FILENAME") || ".tmp/data.db"
         ),
       },
       useNullAsDefault: true,
@@ -73,8 +78,8 @@ export default ({ env }: { env: EnvFunction }) => {
   return {
     connection: {
       client,
-      ...connections[client],
-      acquireConnectionTimeout: env.int("DATABASE_CONNECTION_TIMEOUT") || 60000, // Default fallback
+      ...connections[client], // Now TypeScript knows `client` will always be "mysql", "postgres", or "sqlite"
+      acquireConnectionTimeout: env.int("DATABASE_CONNECTION_TIMEOUT") || 60000,
     },
   };
 };

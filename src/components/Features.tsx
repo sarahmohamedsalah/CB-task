@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client"; // Mark as a client-side component
 
 import { useState, useEffect } from "react";
