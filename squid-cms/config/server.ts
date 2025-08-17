@@ -3,13 +3,14 @@ import path from "path";
 // Define the type for the 'env' function
 type EnvFunction = {
   (key: string): string | undefined; // for strings
-  bool: (key: string) => boolean; // for booleans
-  int: (key: string) => number; // for integers
+  bool: (key: string, defaultValue?: boolean) => boolean; // for booleans with a default value
+  int: (key: string, defaultValue?: number) => number; // for integers with a default value
+  array: (key: string) => string[]; // for arrays
 };
 
 export default ({ env }: { env: EnvFunction }) => ({
-  host: env("HOST", "0.0.0.0"),
-  port: env.int("PORT", 1337),
+  host: env("HOST") || "0.0.0.0", // Handle string defaults manually
+  port: env.int("PORT", 1337), // The integer type expects a default value
   app: {
     keys: env.array("APP_KEYS"),
   },
