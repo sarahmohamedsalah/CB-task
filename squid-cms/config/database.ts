@@ -18,16 +18,14 @@ export default ({ env }: { env: EnvFunction }) => {
         database: env("DATABASE_NAME") || "strapi", // Default fallback
         user: env("DATABASE_USERNAME") || "strapi", // Default fallback
         password: env("DATABASE_PASSWORD") || "strapi", // Default fallback
-        ssl: env.bool("DATABASE_SSL") && {
+        ssl: env("DATABASE_SSL") === "true" && {
           key: env("DATABASE_SSL_KEY"),
           cert: env("DATABASE_SSL_CERT"),
           ca: env("DATABASE_SSL_CA"),
           capath: env("DATABASE_SSL_CAPATH"),
           cipher: env("DATABASE_SSL_CIPHER"),
-          rejectUnauthorized: env.bool(
-            "DATABASE_SSL_REJECT_UNAUTHORIZED",
-            true
-          ),
+          rejectUnauthorized:
+            env("DATABASE_SSL_REJECT_UNAUTHORIZED") === "true",
         },
       },
       pool: {
@@ -43,16 +41,14 @@ export default ({ env }: { env: EnvFunction }) => {
         database: env("DATABASE_NAME") || "strapi",
         user: env("DATABASE_USERNAME") || "strapi",
         password: env("DATABASE_PASSWORD") || "strapi",
-        ssl: env.bool("DATABASE_SSL") && {
+        ssl: env("DATABASE_SSL") === "true" && {
           key: env("DATABASE_SSL_KEY"),
           cert: env("DATABASE_SSL_CERT"),
           ca: env("DATABASE_SSL_CA"),
           capath: env("DATABASE_SSL_CAPATH"),
           cipher: env("DATABASE_SSL_CIPHER"),
-          rejectUnauthorized: env.bool(
-            "DATABASE_SSL_REJECT_UNAUTHORIZED",
-            true
-          ),
+          rejectUnauthorized:
+            env("DATABASE_SSL_REJECT_UNAUTHORIZED") === "true",
         },
         schema: env("DATABASE_SCHEMA") || "public", // Default fallback
       },
