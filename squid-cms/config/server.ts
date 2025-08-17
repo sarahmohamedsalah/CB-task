@@ -22,11 +22,12 @@ export default ({ env }: { env: EnvFunction }) => ({
   database: {
     client: env("DATABASE_CLIENT") || "sqlite", // Handle default for string
     connection: {
+      // Ensure DATABASE_FILENAME is always a string, default to '.tmp/data.db' if undefined
       filename: path.join(
         __dirname,
         "..",
         "..",
-        env("DATABASE_FILENAME", ".tmp/data.db") // Default for filename
+        env("DATABASE_FILENAME") || ".tmp/data.db" // Use fallback directly here
       ),
     },
     useNullAsDefault: true,
